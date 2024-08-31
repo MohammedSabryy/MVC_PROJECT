@@ -5,11 +5,18 @@ namespace Session02.Controllers
     public class ProductsController : Controller
 
     {
-        public ContentResult Get(int id)
+        //Model Binding
+        //From form
+        //From Route
+        //Query string
+        //From body
+        //From header
+
+        public ContentResult Get(int id ,string name , Product product)
         {
             ContentResult result = new ContentResult();
 
-            result.Content = $"Product{id}";
+            result.Content = $"Product{id} : {name}";
             //result.ContentType = "object/pdf" ;
             
 
