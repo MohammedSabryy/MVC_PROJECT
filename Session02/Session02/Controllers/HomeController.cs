@@ -4,14 +4,29 @@ namespace Session02.Controllers
 {
     public class HomeController : Controller
     {
-        public ContentResult Index()
+        public IActionResult Index()
         {
-            ContentResult result = new ContentResult();
+            //ContentResult result = new ContentResult();
 
-            result.Content= "Hello from Index";
-            result.ContentType = "text/html";
+            //result.Content= "Hello from Index";
+            //result.ContentType = "text/html";
 
-            return result;
+            //return result;
+            return View();
+        }
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+
+        public IActionResult ContactUs()
+        {
+            return View();
         }
     }
 }

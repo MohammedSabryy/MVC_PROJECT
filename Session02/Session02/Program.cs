@@ -15,6 +15,7 @@ namespace Session02
 
 
             var app = builder.Build();
+            app.UseStaticFiles();
 
             //app.MapGet("/", () => "Hello World!");
             app.UseRouting();
