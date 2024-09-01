@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    @*Header*@
+    <nav class="mt-5">
+        <Center>
+            <a class="btn btn-success" href="/Home/Index">Home</a>
+            <a class="btn btn-secondary" href="/Home/AboutUs">About Us</a>
+            <a class="btn btn-info" href="/Home/Privacy">Privacy</a>
+            <a class="btn btn-primary" href="/Home/ContactUs">Contact Us</a>
+
+            <a class="btn btn-danger" href="/Account/Index">Login</a>
+            <a class="btn btn-warning" href="/Account/Index">Register</a>
+
+
+        </Center>
+    </nav>
+    @*Header*@
+    @*Body*@
+    <div>
+        @RenderBody()
+    </div>
+    @*Body*@
+    @*Footer*@
+    <Footer class="fixed-bottom">
+        <Center>
+            <div>
+                <p>Copyrights &copy; @DateTime.Now.Year</p>
+            </div>
+        </Center>
+    </Footer>
+    @*Footer*@  
+
+</body>
+</html>
