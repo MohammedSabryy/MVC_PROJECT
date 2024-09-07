@@ -39,5 +39,41 @@ namespace Session03.presentationLayer.Controllers
             var department = _repository.Get(id.Value);
             return View();
         }
+        public IActionResult Edit(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(department);
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id, Department department)
+        {
+            if (id != department.Id) return BadRequest();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _repository.Update(department);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(department);
+        }
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(department);
+
+        }
+
     }
 }
