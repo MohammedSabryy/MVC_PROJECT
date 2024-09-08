@@ -30,14 +30,16 @@ namespace Session03.presentationLayer.Controllers
 
             // Server Side Validation
 
-            if (!ModelState.IsValid) return View(model: department); _repository.Create(entity: department);
-
+            if (!ModelState.IsValid) return View(model: department);
+            _repository.Create(entity: department);
             return RedirectToAction(actionName: nameof(Index));
         }
         public IActionResult Details(int? id)
         {
+            if (!id.HasValue) return BadRequest();
             var department = _repository.Get(id.Value);
-            return View();
+            if (department is null) return NotFound();
+            return View(department);
         }
         public IActionResult Edit(int? id)
         {
@@ -72,7 +74,20 @@ namespace Session03.presentationLayer.Controllers
             var department = _repository.Get(id.Value);
             if (department is null) return NotFound();
             return View(department);
+        }
+        [HttpPost]
+        public IActionResult Delete([FromRoute] int id, Department department)
+        {
+            if (id != department.Id) return BadRequest();
+            if (ModelState.IsValid)
+            {
 
+                _repository.Delete(department);
+                return RedirectToAction(nameof(Index));
+
+
+            }
+            return View(department);
         }
 
     }
