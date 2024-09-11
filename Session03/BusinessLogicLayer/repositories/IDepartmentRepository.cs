@@ -1,5 +1,4 @@
-﻿using Session03.DataAccessLayer.Data;
-using Session03.DataAccessLayer.Models;
+﻿using Session03.DataAccessLayer.Models;
 
 namespace Session03.BusinessLogicLayer.repositories
 {

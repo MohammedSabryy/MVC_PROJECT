@@ -15,7 +15,7 @@ namespace Session03.presentationLayer
 
             //builder.Services.AddScoped<DataContext>();
             builder.Services.AddDbContext<DataContext>(options =>
-            { 
+            {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();

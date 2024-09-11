@@ -15,18 +15,18 @@ namespace Session03.presentationLayer.Controllers
 
         public IActionResult Index()
         {
-            var deprtments = _repository.GetAll(); 
+            var deprtments = _repository.GetAll();
             return View(deprtments);
         }
 
         public IActionResult Create()
-        { 
+        {
             return View();
         }
         [HttpPost]
         public IActionResult Create(Department department)
         {
-        
+
 
             // Server Side Validation
 
@@ -34,23 +34,13 @@ namespace Session03.presentationLayer.Controllers
             _repository.Create(entity: department);
             return RedirectToAction(actionName: nameof(Index));
         }
-        public IActionResult Details(int? id)
-        {
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
-        }
-        public IActionResult Edit(int? id)
-        {
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
+        public IActionResult Details(int? id) => DepartmentControllerHandler(id,nameof(Details));
+        
+        public IActionResult Edit(int? id) => DepartmentControllerHandler(id,nameof(Edit));
 
-        }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, Department department)
         {
             if (id != department.Id) return BadRequest();
@@ -68,13 +58,8 @@ namespace Session03.presentationLayer.Controllers
             }
             return View(department);
         }
-        public IActionResult Delete(int? id)
-        {
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
-        }
+        public IActionResult Delete(int? id) => DepartmentControllerHandler(id,nameof(Delete));
+
         [HttpPost]
         public IActionResult Delete([FromRoute] int id, Department department)
         {
@@ -88,6 +73,14 @@ namespace Session03.presentationLayer.Controllers
 
             }
             return View(department);
+        }
+        private IActionResult DepartmentControllerHandler(int? id,string viewName)
+        {
+
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(viewName,department);
         }
 
     }
