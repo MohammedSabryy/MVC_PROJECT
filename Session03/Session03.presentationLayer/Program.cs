@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Session03.BusinessLogicLayer.Interfaces;
-using Session03.BusinessLogicLayer.repositories;
-using Session03.DataAccessLayer.Data;
+
 
 namespace Session03.presentationLayer
 {
@@ -20,6 +17,8 @@ namespace Session03.presentationLayer
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
+            //builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
