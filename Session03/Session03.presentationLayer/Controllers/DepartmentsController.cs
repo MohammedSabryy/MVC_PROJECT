@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Session03.BusinessLogicLayer.repositories;
+using Session03.BusinessLogicLayer.Interfaces;
 using Session03.DataAccessLayer.Models;
 
 namespace Session03.presentationLayer.Controllers

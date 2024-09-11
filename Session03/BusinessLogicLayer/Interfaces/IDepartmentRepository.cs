@@ -1,6 +1,6 @@
 ﻿using Session03.DataAccessLayer.Models;
 
-namespace Session03.BusinessLogicLayer.repositories
+namespace Session03.BusinessLogicLayer.Interfaces
 {
     public interface IDepartmentRepository
     {
