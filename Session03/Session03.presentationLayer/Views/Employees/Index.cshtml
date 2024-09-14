@@ -16,9 +16,10 @@
         <tr>
                 <td>@Html.DisplayNameFor(d=>d.Name) </td>
                 <td>@Html.DisplayNameFor(d => d.Age)</td>
+                <td>@Html.DisplayNameFor(d => d.Salary)</td>
+                <td>@Html.DisplayNameFor(d => d.Department)</td>
                 <td>@Html.DisplayNameFor(d => d.Address)</td>
                 <td>@Html.DisplayNameFor(d => d.Email)</td>
-                <td>@Html.DisplayNameFor(d => d.Salary)</td>
                 <td>@Html.DisplayNameFor(d => d.Phone)</td>
                 <td>@Html.DisplayNameFor(d => d.IsActive)</td>
 
@@ -33,9 +34,10 @@
                 <tr>
                     <td>@item.Name</td>
                     <td>@item.Age</td>
+                    <td>@Html.DisplayFor(e=>item.Salary)</td>
+                    <td>@item.Department?.Name</td>
                     <td>@item.Address</td>
                     <td>@Html.DisplayFor(e => item.Email)</td>
-                    <td>@Html.DisplayFor(e=>item.Salary)</td>
                     <td>@Html.DisplayFor(e => item.Phone)</td>
                     <td>@if (item.IsActive)
                         {

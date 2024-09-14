@@ -6,4 +6,4 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Session03.BusinessLogicLayer.Interfaces;
 global using Session03.DataAccessLayer.Data;
-
+global using Microsoft.EntityFrameworkCore;

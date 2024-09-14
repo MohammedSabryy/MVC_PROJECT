@@ -1,25 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Session03.DataAccessLayer.Models;
+﻿
 
 namespace Session03.presentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
-        private IEmployeeRepository _repository;
+        private readonly IEmployeeRepository _EmployeeRepository;
+        private readonly IDepartmentRepository _DepartmentRepository;
 
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        public EmployeesController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
-            _repository = employeeRepository;
+            _EmployeeRepository = employeeRepository;
+            _DepartmentRepository = departmentRepository;
         }
 
         public IActionResult Index()
         {
-            var employees = _repository.GetAll();
+            var employees = _EmployeeRepository.GetAllWithDepartments();
             return View(employees);
         }
 
         public IActionResult Create()
         {
+            var Departments = _DepartmentRepository.GetAll();
+            SelectList listItems = new SelectList(Departments,"Id","Name");
+            ViewBag.Departments = listItems;
             return View();
         }
         [HttpPost]
@@ -30,7 +34,7 @@ namespace Session03.presentationLayer.Controllers
             // Server Side Validation
 
             if (!ModelState.IsValid) return View(model: employee);
-            _repository.Create(entity: employee);
+            _EmployeeRepository.Create(entity: employee);
             return RedirectToAction(actionName: nameof(Index));
         }
         public IActionResult Details(int? id) => EmployeeControllerHandler(id, nameof(Details));
@@ -47,7 +51,7 @@ namespace Session03.presentationLayer.Controllers
             {
                 try
                 {
-                    _repository.Update(employee);
+                    _EmployeeRepository.Update(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -66,7 +70,7 @@ namespace Session03.presentationLayer.Controllers
             if (ModelState.IsValid)
             {
 
-                _repository.Delete(employee);
+                _EmployeeRepository.Delete(employee);
                 return RedirectToAction(nameof(Index));
 
 
@@ -75,9 +79,14 @@ namespace Session03.presentationLayer.Controllers
         }
         private IActionResult EmployeeControllerHandler(int? id, string viewName)
         {
-
+            if (viewName == nameof(Edit))
+            {
+                var Departments = _DepartmentRepository.GetAll();
+                SelectList listItems = new SelectList(Departments, "Id", "Name");
+                ViewBag.Departments = listItems;
+            }
             if (!id.HasValue) return BadRequest();
-            var employee = _repository.Get(id.Value);
+            var employee = _EmployeeRepository.Get(id.Value);
             if (employee is null) return NotFound();
             return View(viewName, employee);
         }
