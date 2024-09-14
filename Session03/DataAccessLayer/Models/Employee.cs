@@ -22,5 +22,7 @@ namespace Session03.DataAccessLayer.Models
         [Phone]
         public string Phone { get; set; }
         public bool IsActive { get; set; }
+        public Department? Department { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }
