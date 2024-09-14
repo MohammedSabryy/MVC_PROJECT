@@ -6,7 +6,7 @@
         {
             //string folderPath = Directory.GetCurrentDirectory()+@"\wwwroot\Files";
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(),@"wwwroot\Files", folderName);
-            string fileName = $"{Guid.NewGuid}-{file.FileName}";
+            string fileName = $"{Guid.NewGuid()}-{file.FileName}";
             string filePath = Path.Combine(folderPath, fileName);
             using var stream = new FileStream(filePath, FileMode.Create);
             file.CopyTo(stream);

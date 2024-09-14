@@ -9,3 +9,4 @@ global using System.ComponentModel.DataAnnotations;
 global using Session03.presentationLayer.ViewModels;
 global using AutoMapper;
 global using System.Reflection;
+global using Session03.presentationLayer.Utilities;

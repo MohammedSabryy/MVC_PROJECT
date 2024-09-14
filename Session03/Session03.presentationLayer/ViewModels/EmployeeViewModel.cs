@@ -18,6 +18,8 @@ namespace Session03.presentationLayer.ViewModels
         [Phone]
         public string Phone { get; set; }
         public bool IsActive { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
         public Department? Department { get; set; }
         public int? DepartmentId { get; set; }
 

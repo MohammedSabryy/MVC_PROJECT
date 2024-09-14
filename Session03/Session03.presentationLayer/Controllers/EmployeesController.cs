@@ -1,9 +1,4 @@
-﻿
-
-
-using Session03.DataAccessLayer.Models;
-
-namespace Session03.presentationLayer.Controllers
+﻿namespace Session03.presentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
@@ -40,8 +35,10 @@ namespace Session03.presentationLayer.Controllers
 
 
             // Server Side Validation
-            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             if (!ModelState.IsValid) return View(model: employeeVM);
+            if(employeeVM.Image is not null)
+                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             _unitOfWork.Employees.Create(entity: employee);
             _unitOfWork.saveChanges();
             return RedirectToAction(actionName: nameof(Index));
@@ -60,6 +57,8 @@ namespace Session03.presentationLayer.Controllers
             {
                 try
                 {
+                    if (employeeVM.Image is not null)
+                        employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
                     var employee = _mapper.Map<EmployeeViewModel,Employee>(employeeVM);
                     _unitOfWork.Employees.Update(employee);
                     if (_unitOfWork.saveChanges() > 0)
@@ -85,7 +84,10 @@ namespace Session03.presentationLayer.Controllers
             {
 
                 _unitOfWork.Employees.Delete(employee);
-                _unitOfWork.saveChanges();
+                if(_unitOfWork.saveChanges()>0 && employee.ImageName is not null)
+                {
+                    DocumentSettings.DeleteFile("Images", employee.ImageName);
+                }
                 return RedirectToAction(nameof(Index));
 
 
