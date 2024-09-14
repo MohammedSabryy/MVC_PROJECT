@@ -18,11 +18,15 @@ namespace Session03.presentationLayer.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? SearchValue)
         {
-            var employees = _EmployeeRepository.GetAllWithDepartments();
-            var employeeVM = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeViewModel>>(employees);
-            return View(employeeVM);
+            var employees = Enumerable.Empty<Employee>();
+            if (string.IsNullOrWhiteSpace(SearchValue))
+                employees = _EmployeeRepository.GetAllWithDepartments();
+            else employees = _EmployeeRepository.GetAll(SearchValue);
+            var employeeVM = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            return View(employeeVM); 
+            
         }
 
         public IActionResult Create()

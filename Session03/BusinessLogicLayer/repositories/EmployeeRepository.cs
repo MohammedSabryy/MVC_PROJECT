@@ -6,7 +6,8 @@
         {
         }
 
-        public IEnumerable<Employee> GetAll(string Address)=> _dpSet.Where(e=>e.Address.ToLower()==Address.ToLower()).ToList();
+        public IEnumerable<Employee> GetAll(string Name)
+            => _dpSet.Where(e=>e.Name.ToLower().Contains(Name.ToLower())).Include(e => e.Department).ToList();
         
 
         public IEnumerable<Employee> GetAllWithDepartments()=>

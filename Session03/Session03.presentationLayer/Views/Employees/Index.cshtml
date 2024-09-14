@@ -7,6 +7,16 @@
 <div>
     <a class="btn btn-primary mt-3" asp-action="Create">Create New Employee</a>
 </div>
+<div class="mt-2">
+    <form method="get" asp-action="Index" class="row offset-2">
+        <div class="col-10">
+            <input class="form-control" type="text" placeholder="Employee's Name" name="SearchValue" required/>
+        </div>
+        <div class="col-2">
+            <input class="btn btn-info" type="submit" value="Search" />
+        </div>
+    </form>
+</div>
 @if (Model.Any())
 {
     <h1>All Employees</h1>
