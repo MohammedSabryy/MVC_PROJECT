@@ -7,14 +7,12 @@ namespace Session03.presentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly IEmployeeRepository _EmployeeRepository;
-        private readonly IDepartmentRepository _DepartmentRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeesController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository, IMapper mapper)
+        public EmployeesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _EmployeeRepository = employeeRepository;
-            _DepartmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -22,8 +20,8 @@ namespace Session03.presentationLayer.Controllers
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrWhiteSpace(SearchValue))
-                employees = _EmployeeRepository.GetAllWithDepartments();
-            else employees = _EmployeeRepository.GetAll(SearchValue);
+                employees = _unitOfWork.Employees.GetAllWithDepartments();
+            else employees = _unitOfWork.Employees.GetAll(SearchValue);
             var employeeVM = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(employeeVM); 
             
@@ -31,7 +29,7 @@ namespace Session03.presentationLayer.Controllers
 
         public IActionResult Create()
         {
-            var Departments = _DepartmentRepository.GetAll();
+            var Departments = _unitOfWork.Departments.GetAll();
             SelectList listItems = new SelectList(Departments,"Id","Name");
             ViewBag.Departments = listItems;
             return View();
@@ -44,7 +42,8 @@ namespace Session03.presentationLayer.Controllers
             // Server Side Validation
             var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             if (!ModelState.IsValid) return View(model: employeeVM);
-            _EmployeeRepository.Create(entity: employee);
+            _unitOfWork.Employees.Create(entity: employee);
+            _unitOfWork.saveChanges();
             return RedirectToAction(actionName: nameof(Index));
         }
         public IActionResult Details(int? id) => EmployeeControllerHandler(id, nameof(Details));
@@ -62,7 +61,11 @@ namespace Session03.presentationLayer.Controllers
                 try
                 {
                     var employee = _mapper.Map<EmployeeViewModel,Employee>(employeeVM);
-                    _EmployeeRepository.Update(employee);
+                    _unitOfWork.Employees.Update(employee);
+                    if (_unitOfWork.saveChanges() > 0)
+                    {
+                        TempData["Message"] = $"Employee {employeeVM.Name} Updated Successfully";
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -81,7 +84,8 @@ namespace Session03.presentationLayer.Controllers
             if (ModelState.IsValid)
             {
 
-                _EmployeeRepository.Delete(employee);
+                _unitOfWork.Employees.Delete(employee);
+                _unitOfWork.saveChanges();
                 return RedirectToAction(nameof(Index));
 
 
@@ -92,12 +96,12 @@ namespace Session03.presentationLayer.Controllers
         {
             if (viewName == nameof(Edit))
             {
-                var Departments = _DepartmentRepository.GetAll();
+                var Departments = _unitOfWork.Departments.GetAll();
                 SelectList listItems = new SelectList(Departments, "Id", "Name");
                 ViewBag.Departments = listItems;
             }
             if (!id.HasValue) return BadRequest();
-            var employee = _EmployeeRepository.Get(id.Value);
+            var employee = _unitOfWork.Employees.Get(id.Value);
             if (employee is null) return NotFound();
             //var EmployeeVM = new EmployeeViewModel
             //{
