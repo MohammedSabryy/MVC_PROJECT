@@ -1,5 +1,7 @@
 
 
+
+
 namespace Session03.presentationLayer
 {
     public class Program
@@ -16,8 +18,10 @@ namespace Session03.presentationLayer
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
             //builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             var app = builder.Build();

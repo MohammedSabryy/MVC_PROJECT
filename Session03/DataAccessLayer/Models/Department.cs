@@ -11,5 +11,6 @@ namespace Session03.DataAccessLayer.Models
         public string Name { get; set; }
         [Display(Name = "Created At")]
         public DateTime Date { get; set; }
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

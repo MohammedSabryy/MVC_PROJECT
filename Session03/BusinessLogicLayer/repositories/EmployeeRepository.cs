@@ -1,9 +1,4 @@
-﻿
-
-
-
-
-namespace Session03.BusinessLogicLayer.repositories
+﻿namespace Session03.BusinessLogicLayer.repositories
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
@@ -11,9 +6,11 @@ namespace Session03.BusinessLogicLayer.repositories
         {
         }
 
-        public IEnumerable<Employee> GetAll(string Address)
-        {
-           return _dpSet.Where(e=>e.Address.ToLower()==Address.ToLower()).ToList();
-        }
+        public IEnumerable<Employee> GetAll(string Name)
+            => _dpSet.Where(e=>e.Name.ToLower().Contains(Name.ToLower())).Include(e => e.Department).ToList();
+        
+
+        public IEnumerable<Employee> GetAllWithDepartments()=>
+        _dpSet.Include(e=>e.Department).ToList();
     }
 }

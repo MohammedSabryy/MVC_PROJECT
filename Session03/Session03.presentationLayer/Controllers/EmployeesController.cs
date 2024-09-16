@@ -1,36 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+
+
 using Session03.DataAccessLayer.Models;
 
 namespace Session03.presentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
-        private IEmployeeRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        public EmployeesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = employeeRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? SearchValue)
         {
-            var employees = _repository.GetAll();
-            return View(employees);
+            var employees = Enumerable.Empty<Employee>();
+            if (string.IsNullOrWhiteSpace(SearchValue))
+                employees = _unitOfWork.Employees.GetAllWithDepartments();
+            else employees = _unitOfWork.Employees.GetAll(SearchValue);
+            var employeeVM = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            return View(employeeVM); 
+            
         }
 
         public IActionResult Create()
         {
+            var Departments = _unitOfWork.Departments.GetAll();
+            SelectList listItems = new SelectList(Departments,"Id","Name");
+            ViewBag.Departments = listItems;
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeViewModel employeeVM)
         {
 
 
             // Server Side Validation
-
-            if (!ModelState.IsValid) return View(model: employee);
-            _repository.Create(entity: employee);
+            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+            if (!ModelState.IsValid) return View(model: employeeVM);
+            _unitOfWork.Employees.Create(entity: employee);
+            _unitOfWork.saveChanges();
             return RedirectToAction(actionName: nameof(Index));
         }
         public IActionResult Details(int? id) => EmployeeControllerHandler(id, nameof(Details));
@@ -40,14 +53,19 @@ namespace Session03.presentationLayer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employeeVM)
         {
-            if (id != employee.Id) return BadRequest();
+            if (id != employeeVM.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _repository.Update(employee);
+                    var employee = _mapper.Map<EmployeeViewModel,Employee>(employeeVM);
+                    _unitOfWork.Employees.Update(employee);
+                    if (_unitOfWork.saveChanges() > 0)
+                    {
+                        TempData["Message"] = $"Employee {employeeVM.Name} Updated Successfully";
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -55,7 +73,7 @@ namespace Session03.presentationLayer.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            return View(employee);
+            return View(employeeVM);
         }
         public IActionResult Delete(int? id) => EmployeeControllerHandler(id, nameof(Delete));
 
@@ -66,7 +84,8 @@ namespace Session03.presentationLayer.Controllers
             if (ModelState.IsValid)
             {
 
-                _repository.Delete(employee);
+                _unitOfWork.Employees.Delete(employee);
+                _unitOfWork.saveChanges();
                 return RedirectToAction(nameof(Index));
 
 
@@ -75,11 +94,30 @@ namespace Session03.presentationLayer.Controllers
         }
         private IActionResult EmployeeControllerHandler(int? id, string viewName)
         {
-
+            if (viewName == nameof(Edit))
+            {
+                var Departments = _unitOfWork.Departments.GetAll();
+                SelectList listItems = new SelectList(Departments, "Id", "Name");
+                ViewBag.Departments = listItems;
+            }
             if (!id.HasValue) return BadRequest();
-            var employee = _repository.Get(id.Value);
+            var employee = _unitOfWork.Employees.Get(id.Value);
             if (employee is null) return NotFound();
-            return View(viewName, employee);
+            //var EmployeeVM = new EmployeeViewModel
+            //{
+            //    Address = employee.Address,
+            //    Department = employee.Department,
+            //    Age = employee.Age,
+            //    DepartmentId = employee.DepartmentId,
+            //    Name = employee.Name,
+            //    Email = employee.Email,
+            //    Id = employee.Id,
+            //    IsActive = employee.IsActive,
+            //    Phone = employee.Phone,
+            //    Salary = employee.Salary,
+            //};
+            var employeeVM = _mapper.Map<EmployeeViewModel>(employee);
+            return View(viewName, employeeVM);
         }
 
     }
