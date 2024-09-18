@@ -3,13 +3,15 @@
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-		public AccountController(UserManager<ApplicationUser> userManager)
-		{
-			_userManager = userManager;
-		}
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
-		public IActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
@@ -35,5 +37,21 @@
 		{
 			return View();
 		}
-	}
+        [HttpPost]
+        public IActionResult Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if (user is not null)
+            {
+                if(_userManager.CheckPasswordAsync(user, model.Password).Result)
+                {
+                    var result = _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false).Result;
+                    if (result.Succeeded) return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller",string.Empty));
+                }
+            }
+            ModelState.AddModelError(string.Empty, "InCorrect Email Or Password");
+            return View(model);
+        }
+    }
 }
