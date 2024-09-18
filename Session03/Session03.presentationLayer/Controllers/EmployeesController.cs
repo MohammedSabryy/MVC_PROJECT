@@ -1,5 +1,6 @@
 ﻿namespace Session03.presentationLayer.Controllers
 {
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IMapper _mapper;
@@ -10,7 +11,8 @@
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult Index(string? SearchValue)
         {
             var employees = Enumerable.Empty<Employee>();
@@ -30,6 +32,7 @@
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeViewModel employeeVM)
         {
 

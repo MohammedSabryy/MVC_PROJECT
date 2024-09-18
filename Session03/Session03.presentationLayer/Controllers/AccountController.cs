@@ -53,5 +53,10 @@
             ModelState.AddModelError(string.Empty, "InCorrect Email Or Password");
             return View(model);
         }
+        public new IActionResult SignOut()
+        {
+            _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
     }
 }
