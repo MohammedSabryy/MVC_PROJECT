@@ -79,6 +79,7 @@
                     Body = url!,
                     Recipient = model.Email
                 };
+                MailSettings.SendEmail(email);
                 return RedirectToAction(nameof(CheckYourInbox));
             }
             ModelState.AddModelError(string.Empty, "User Not Found");

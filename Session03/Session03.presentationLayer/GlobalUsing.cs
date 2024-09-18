@@ -13,3 +13,4 @@ global using Session03.presentationLayer.Utilities;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore.Metadata.Internal;
 global using Microsoft.AspNetCore.Authorization;
+global using System.Net.Mail;

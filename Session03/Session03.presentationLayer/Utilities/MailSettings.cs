@@ -1,4 +1,8 @@
-﻿namespace Session03.presentationLayer.Utilities
+﻿
+
+using System.Net;
+
+namespace Session03.presentationLayer.Utilities
 {
 	public class Email
 	{
@@ -6,7 +10,14 @@
 		public string Body { get; set; }
 		public string Recipient {  get; set; }
     }
-	public class MailSettings
+	public static class MailSettings
 	{
+		public static void SendEmail(Email email)
+		{
+			var client = new SmtpClient("smtp.gmail.com",587);
+			client.EnableSsl = true;
+			client.Credentials = new NetworkCredential("mhmdasabry@gmail.com", "viipfcxcmrrihvup");
+			client.Send("mhmdasabry@gmail.com", email.Recipient, email.Subject, email.Body);
+		}
 	}
 }
