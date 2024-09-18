@@ -1,4 +1,7 @@
-﻿namespace Session03.presentationLayer.Controllers
+﻿using NuGet.Common;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Session03.presentationLayer.Controllers
 {
     public class AccountController : Controller
     {
@@ -89,9 +92,29 @@
 		{
 			return View();
 		}
-		public IActionResult ResetPassword()
-        {  
+		public IActionResult ResetPassword(string email, string token)
+        {
+            if (email == null || token == null) return BadRequest();
+            TempData["Email"]= email;
+            TempData["token"] = token;
             return View(); 
         }
-    }
+        [HttpPost]
+		public IActionResult ResetPassword(ResetPasswordViewModel model)
+		{
+            model.Token = TempData["token"]?.ToString()??string.Empty;
+			model.Email = TempData["email"]?.ToString() ?? string.Empty;
+			if (!ModelState.IsValid) return View(model);
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if (user != null)
+            {
+                var result = _userManager.ResetPasswordAsync(user, model.Token, model.Password).Result;
+                if (result.Succeeded) return RedirectToAction(nameof(Login));
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+            }
+			ModelState.AddModelError(string.Empty,"User Not Found");
+			return View(model);
+		}
+	}
 }

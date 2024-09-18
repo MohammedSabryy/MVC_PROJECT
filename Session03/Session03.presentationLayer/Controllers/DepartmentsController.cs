@@ -34,7 +34,7 @@ namespace Session03.presentationLayer.Controllers
 
             if (!ModelState.IsValid) return View(model: department);
             _repository.Create(entity: department);
-            return RedirectToAction(actionName: nameof(Index));
+            return RedirectToAction(actionName: nameof(DepartmentsController.Index));
         }
         public IActionResult Details(int? id) => DepartmentControllerHandler(id,nameof(Details));
         
