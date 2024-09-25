@@ -15,9 +15,9 @@ namespace Session03.presentationLayer.Controllers
             _repository = departmentRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var deprtments = _repository.GetAllAsync();
+            var deprtments =await _repository.GetAllAsync();
             return View(deprtments);
         }
 
