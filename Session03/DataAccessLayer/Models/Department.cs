@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Session03.DataAccessLayer.Models
+﻿namespace Session03.DataAccessLayer.Models
 {
     public class Department
     {
