@@ -18,6 +18,7 @@ namespace Session03.presentationLayer.Controllers
         {
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> Create(RoleViewModel model)
         {
             if(!ModelState.IsValid) return View(model);
