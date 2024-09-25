@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Session03.DataAccessLayer.Models
+﻿namespace Session03.DataAccessLayer.Models
 {
     public class Department
     {
@@ -16,5 +9,6 @@ namespace Session03.DataAccessLayer.Models
         public string Name { get; set; }
         [Display(Name = "Created At")]
         public DateTime Date { get; set; }
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

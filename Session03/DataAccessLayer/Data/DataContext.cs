@@ -1,14 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Session03.DataAccessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Session03.DataAccessLayer.Data
+﻿namespace Session03.DataAccessLayer.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext <ApplicationUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -21,5 +13,12 @@ namespace Session03.DataAccessLayer.Data
 
         //}
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Employee>().Property(e=>e.Salary).HasColumnType("decimal(18,5)");
+        }
     }
 }

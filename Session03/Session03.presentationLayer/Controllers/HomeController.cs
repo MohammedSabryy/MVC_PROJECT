@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Session03.presentationLayer.Models;
+using Session03.presentationLayer.ViewModels;
 using System.Diagnostics;
 
 namespace Session03.presentationLayer.Controllers

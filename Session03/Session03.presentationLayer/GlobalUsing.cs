@@ -1,0 +1,16 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using Session03.BusinessLogicLayer.Interfaces;
+global using Session03.DataAccessLayer.Models;
+global using Microsoft.EntityFrameworkCore;
+global using Session03.DataAccessLayer.Data;
+global using Session03.BusinessLogicLayer.repositories;
+global using Microsoft.AspNetCore.Mvc.Rendering;
+global using System.ComponentModel.DataAnnotations;
+global using Session03.presentationLayer.ViewModels;
+global using AutoMapper;
+global using System.Reflection;
+global using Session03.presentationLayer.Utilities;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore.Metadata.Internal;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Net.Mail;
