@@ -3,7 +3,8 @@ using System.Data;
 
 namespace Session03.presentationLayer.Controllers
 {
-	public class UsersController : Controller
+    [Authorize(Roles = "Admin")]
+    public class UsersController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 

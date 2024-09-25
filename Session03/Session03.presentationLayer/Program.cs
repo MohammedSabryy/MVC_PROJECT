@@ -24,6 +24,7 @@ namespace Session03.presentationLayer
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
             builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
+            
             //builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             var app = builder.Build();
 
@@ -40,6 +41,7 @@ namespace Session03.presentationLayer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
