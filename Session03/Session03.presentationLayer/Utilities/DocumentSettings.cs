@@ -2,14 +2,14 @@
 {
     public static class DocumentSettings
     {
-        public static string UploadFile(IFormFile file, string folderName) 
+        public static async Task <string> UploadFileAsync(IFormFile file, string folderName) 
         {
             //string folderPath = Directory.GetCurrentDirectory()+@"\wwwroot\Files";
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(),@"wwwroot\Files", folderName);
             string fileName = $"{Guid.NewGuid()}-{file.FileName}";
             string filePath = Path.Combine(folderPath, fileName);
             using var stream = new FileStream(filePath, FileMode.Create);
-            file.CopyTo(stream);
+            await file.CopyToAsync(stream);
             return fileName;
         }
 

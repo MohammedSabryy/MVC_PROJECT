@@ -17,7 +17,7 @@ namespace Session03.presentationLayer.Controllers
 
         public IActionResult Index()
         {
-            var deprtments = _repository.GetAll();
+            var deprtments = _repository.GetAllAsync();
             return View(deprtments);
         }
 
@@ -33,12 +33,12 @@ namespace Session03.presentationLayer.Controllers
             // Server Side Validation
 
             if (!ModelState.IsValid) return View(model: department);
-            _repository.Create(entity: department);
+            _repository.AddAsync(entity: department);
             return RedirectToAction(actionName: nameof(DepartmentsController.Index));
         }
-        public IActionResult Details(int? id) => DepartmentControllerHandler(id,nameof(Details));
+        public async Task<IActionResult> Details(int? id) => await DepartmentControllerHandler(id, nameof(Details));
         
-        public IActionResult Edit(int? id) => DepartmentControllerHandler(id,nameof(Edit));
+        public async Task<IActionResult> Edit(int? id) => await DepartmentControllerHandler(id, nameof(Edit));
 
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace Session03.presentationLayer.Controllers
             }
             return View(department);
         }
-        public IActionResult Delete(int? id) => DepartmentControllerHandler(id,nameof(Delete));
+        public async Task<IActionResult> Delete(int? id) =>await DepartmentControllerHandler(id,nameof(Delete));
 
         [HttpPost]
         public IActionResult Delete([FromRoute] int id, Department department)
@@ -76,11 +76,11 @@ namespace Session03.presentationLayer.Controllers
             }
             return View(department);
         }
-        private IActionResult DepartmentControllerHandler(int? id,string viewName)
+        private async Task<IActionResult> DepartmentControllerHandler(int? id,string viewName)
         {
 
             if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
+            var department =await _repository.GetAsync(id.Value);
             if (department is null) return NotFound();
             return View(viewName,department);
         }

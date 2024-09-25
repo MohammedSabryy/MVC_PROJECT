@@ -1,4 +1,5 @@
-﻿namespace Session03.BusinessLogicLayer.repositories
+﻿
+namespace Session03.BusinessLogicLayer.repositories
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
@@ -6,11 +7,11 @@
         {
         }
 
-        public IEnumerable<Employee> GetAll(string Name)
-            => _dpSet.Where(e=>e.Name.ToLower().Contains(Name.ToLower())).Include(e => e.Department).ToList();
+        public async Task <IEnumerable<Employee>> GetAllAsync(string Name)
+            =>await  _dpSet.Where(e=>e.Name.ToLower().Contains(Name.ToLower())).Include(e => e.Department).ToListAsync();
         
 
-        public IEnumerable<Employee> GetAllWithDepartments()=>
-        _dpSet.Include(e=>e.Department).ToList();
+        public async Task <IEnumerable<Employee>> GetAllWithDepartmentsAsync()=>
+        await _dpSet.Include(e=>e.Department).ToListAsync();
     }
 }

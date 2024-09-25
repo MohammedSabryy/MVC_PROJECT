@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,13 +19,13 @@ namespace Session03.BusinessLogicLayer.repositories
             _dpSet = _context.Set<TEntity>();
         }
 
-        public void Create(TEntity entity)=> _dpSet.Add(entity);
+        public async Task AddAsync(TEntity entity)=>await  _dpSet.AddAsync(entity);
 
         public void Delete(TEntity entity)=> _dpSet.Remove(entity);
 
-        public TEntity? Get(int id)=> _dpSet.Find(id);
+        public async Task<TEntity?> GetAsync(int id)=>await  _dpSet.FindAsync(id);
 
-        public IEnumerable<TEntity> GetAll()=> _dpSet.ToList();
+        public async Task <IEnumerable<TEntity>> GetAllAsync()=>await  _dpSet.ToListAsync();
 
         public void Update(TEntity entity)=> _dpSet.Update(entity);
     }

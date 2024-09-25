@@ -14,9 +14,9 @@ namespace Session03.presentationLayer.Utilities
 	{
 		public static void SendEmail(Email email)
 		{
-			var client = new SmtpClient("smtp.gmail.com",587);
+			var client = new SmtpClient("smtp.gmail.com ", 587);
 			client.EnableSsl = true;
-			client.Credentials = new NetworkCredential("mhmdasabry@gmail.com", "viipfcxcmrrihvup");
+			client.Credentials = new NetworkCredential("mhmdasabry@gmail.com", "qorxoavieraaljkq");
 			client.Send("mhmdasabry@gmail.com", email.Recipient, email.Subject, email.Body);
 		}
 	}

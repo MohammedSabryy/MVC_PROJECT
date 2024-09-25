@@ -23,6 +23,6 @@ namespace Session03.BusinessLogicLayer.repositories
 
         public IDepartmentRepository Departments => _departmentRepository.Value;
 
-        public int saveChanges()=> _dataContext.SaveChanges();
+        public async Task <int> saveChangesAsync()=>await _dataContext.SaveChangesAsync();
     }
 }

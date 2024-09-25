@@ -10,7 +10,7 @@ namespace Session03.BusinessLogicLayer.Interfaces
     {
         public IEmployeeRepository Employees { get; }
         public IDepartmentRepository Departments { get; }
-        public int saveChanges();
+        public Task <int> saveChangesAsync();
 
     }
 }

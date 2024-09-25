@@ -69,7 +69,7 @@ namespace Session03.presentationLayer.Controllers
         [HttpPost]
         public IActionResult ForgetPassword(ForgetPasswordViewModel model)
         {
-            if (ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
             var user = _userManager.FindByEmailAsync(model.Email).Result;
             if (user is not null)
             {
